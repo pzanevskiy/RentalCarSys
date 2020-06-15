@@ -3,6 +3,7 @@ package com.project.servlets;
 import com.project.DB.UserDB;
 import com.project.entities.User;
 import com.project.enums.UserStatus;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 @WebServlet("/AddUserServlet")
 public class AddUserServlet extends HttpServlet {
+    private static final Logger LOG=Logger.getLogger(AddUserServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user=new User();
         ArrayList<User> users =new ArrayList<User>();
@@ -27,6 +29,7 @@ public class AddUserServlet extends HttpServlet {
         user.setMoney(Integer.parseInt(request.getParameter("money")));
         user.setStatus(UserStatus.USER);
         UserDB.addUser(user);
+        LOG.info("new user created "+user.getName());
         response.sendRedirect(request.getContextPath());
     }
 

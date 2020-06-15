@@ -40,7 +40,7 @@ public class RentCarServlet extends HttpServlet {
             order.setStatus(OrderStatus.AWAITING);
             order.setDuration(dur); /*Integer.parseInt(request.getParameter("dur"))*/
             OrderDB.addOrder(order);
-            LOG.info(order);
+            LOG.info(user.getName()+" rent "+car.getName()+" "+car.getModel());
         }
         response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");
 

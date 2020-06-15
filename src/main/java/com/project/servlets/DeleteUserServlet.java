@@ -1,6 +1,8 @@
 package com.project.servlets;
 
 import com.project.DB.UserDB;
+import com.project.entities.User;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,10 +13,13 @@ import java.io.IOException;
 
 @WebServlet("/DeleteUserServlet")
 public class DeleteUserServlet extends HttpServlet {
+    private static final Logger LOG=Logger.getLogger(DeleteUserServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         int id=Integer.parseInt(request.getParameter("id"));
         UserDB.removeUser(id);
+        User user=UserDB.getUserById(id);
+        LOG.info("user "+user.getName()+" deleted");
         response.sendRedirect(request.getContextPath()+"/ViewUsersServlet");
     }
 

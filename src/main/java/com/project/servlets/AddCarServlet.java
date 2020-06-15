@@ -3,6 +3,7 @@ package com.project.servlets;
 import com.project.DB.CarDB;
 import com.project.entities.Car;
 import com.project.enums.CarStatus;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 @WebServlet("/AddCarServlet")
 public class AddCarServlet extends HttpServlet {
+    private static final Logger LOG=Logger.getLogger(AddCarServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Car car=new Car();
@@ -28,6 +30,7 @@ public class AddCarServlet extends HttpServlet {
         car.setPrice(Integer.parseInt(request.getParameter("price")));
         car.setStatus(CarStatus.FREE);
         CarDB.addCar(car);
+        LOG.info("admin add new car "+car.getName()+" "+car.getModel()+" "+car.getPrice());
         response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");
     }
 
