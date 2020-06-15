@@ -5,6 +5,7 @@ import com.project.DB.UserDB;
 import com.project.entities.Order;
 import com.project.entities.User;
 import com.project.enums.OrderStatus;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 @WebServlet("/ViewAwaitOrdersServlet")
 public class ViewAwaitOrdersServlet extends HttpServlet {
+    private static final Logger LOG=Logger.getLogger(ViewAwaitOrdersServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
@@ -39,11 +41,13 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                         userP.setMoney(finalMoney);
                         UserDB.updateUser(userP);
                         OrderDB.updateOrderStatus(order);
+                        LOG.info("order "+order.getId()+" accepted");
                         break;
                     }
                     case "reject":{
                         order.setStatus(OrderStatus.REJECTED);
                         OrderDB.updateOrderStatus(order);
+                        LOG.info("order "+order.getId()+" rejected");
                         break;
                     }
                     default:{
@@ -53,6 +57,8 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                 break;
             }
             case USER:{
+                Order order=OrderDB.getOrderById(id);
+                LOG.info("user "+user.getName()+" removed order "+order.getId());
                 OrderDB.removeOrder(id);
                 break;
             }
