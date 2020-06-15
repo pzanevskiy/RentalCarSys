@@ -17,8 +17,9 @@ public class DeleteUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         int id=Integer.parseInt(request.getParameter("id"));
-        UserDB.removeUser(id);
         User user=UserDB.getUserById(id);
+        UserDB.removeUser(id);
+
         LOG.info("user "+user.getName()+" deleted");
         response.sendRedirect(request.getContextPath()+"/ViewUsersServlet");
     }
