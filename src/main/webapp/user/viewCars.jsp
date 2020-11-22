@@ -15,35 +15,28 @@
 <body>
     <jsp:include page="user.jsp" />
 <div class="view_content">
-    <table>
-        <caption>Cars</caption>
-        <thead>
-        <tr>
-            <td>Brand</td>
-            <td>Model</td>
-            <td>Type</td>
-            <td>Price</td>
-            <td>Status</td>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="item" items="${cars}">
-            <tr>
-                <td>${item.name}</td>
-                <td>${item.model}</td>
-                <td>${item.type}</td>
-                <td>${item.price}</td>
-                <td>${item.status}</td>
-                <td>
-                    <form action="RentCarServlet">
-                        <input type="hidden" name="id" value="${item.id}">
-                        <input type="submit" value="Rent car" class="button">
-                    </form>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row row-cols-3">
+            <c:forEach var="item" items="${cars}">
+                <div class="col">
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.model}</td>
+                        <td>${item.type}</td>
+                        <td>${item.price}</td>
+                        <td>${item.status}</td>
+                        <td>
+                            <form action="RentCarServlet">
+                                <input type="hidden" name="id" value="${item.id}">
+                                <input type="submit" value="Rent car" class="button">
+                            </form>
+                        </td>
+                    </tr>
+                </div>
+            </c:forEach>
+
+        </div>
+    </div>
 </div>
 </body>
 </html>

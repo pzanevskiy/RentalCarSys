@@ -17,7 +17,7 @@
 <jsp:include page="admin.jsp" />
 <div class="view_content">
     <table>
-        <caption>Cars</caption>
+        <caption>User</caption>
         <thead>
         <tr>
             <td>ID</td>
