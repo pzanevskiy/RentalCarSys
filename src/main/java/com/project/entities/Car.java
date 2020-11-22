@@ -6,21 +6,21 @@ public class Car {
     private int id;
     private String name;
     private String model;
-    private String type;
     private int price;
     private CarStatus status;
+
 
     public Car(){
 
     }
 
-    public Car(int id, String name,String model, String type, int price, CarStatus status) {
+    public Car(int id, String name,String model, int price, CarStatus status) {
         this.id = id;
         this.name=name;
-        this.type = type;
         this.model = model;
         this.price = price;
         this.status = status;
+
     }
 
     public int getId() {
@@ -37,14 +37,6 @@ public class Car {
 
     public void setName(String name) {
         this.name=name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getModel() {
@@ -70,6 +62,8 @@ public class Car {
     public void setStatus(CarStatus status) {
         this.status = status;
     }
+
+
 
     @Override
     public String toString() {

@@ -18,7 +18,6 @@
     <form action="RentCarServlet" method="post">
         <p>Brand: ${car.name}</p>
         <p>Model: ${car.model}</p>
-        <p>Type: ${car.type}</p>
         <p>Price: ${car.price}</p>
         <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>
         <p>

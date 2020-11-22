@@ -19,7 +19,6 @@
         <p>ID: ${car.id}</p>
         <p>Brand: <input type="text" name="brand" autocomplete="off" value="${car.name}" pattern="^[a-zA-Z]+$"></p>
         <p>Model: <input type="text" name="model" autocomplete="off" value="${car.model}"></p>
-        <p>Type: <input type="text" name="type" autocomplete="off" value="${car.type}" pattern="^[a-zA-Z]+$"></p>
         <p>Price: <input type="text" name="price" autocomplete="off" value="${car.price}" pattern="[0-9]{1,}"></p>
         <p>Status:
             <input type="hidden" name="status" value="${car.status}">

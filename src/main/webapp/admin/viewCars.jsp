@@ -43,8 +43,6 @@
         <tr>
             <td>ID</td>
             <td>Brand</td>
-            <td>Model</td>
-            <td>Type</td>
             <td>Price</td>
             <td>Status</td>
         </tr>
@@ -55,7 +53,6 @@
                 <td>${item.id}</td>
                 <td>${item.name}</td>
                 <td>${item.model}</td>
-                <td>${item.type}</td>
                 <td>${item.price}</td>
                 <td>${item.status}</td>
                 <td>
@@ -78,7 +75,6 @@
                 <td>N/A</td>
                 <td><input type="text" name="brand"></td>
                 <td><input type="text" name="model"></td>
-                <td><input type="text" name="type"></td>
                 <td><input type="text" name="price"></td>
                 <td>FREE</td>
                 <td><input type="submit" value="Add car" class="button"></td>

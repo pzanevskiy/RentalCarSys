@@ -26,7 +26,6 @@ public class AddCarServlet extends HttpServlet {
         car.setId(id);
         car.setName(request.getParameter("brand"));
         car.setModel(request.getParameter("model"));
-        car.setType(request.getParameter("type"));
         car.setPrice(Integer.parseInt(request.getParameter("price")));
         car.setStatus(CarStatus.FREE);
         CarDB.addCar(car);

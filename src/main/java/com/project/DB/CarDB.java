@@ -4,15 +4,20 @@ import com.project.entities.Car;
 import com.project.enums.CarStatus;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 
 public class CarDB {
 
     private static final String url="jdbc:mysql://localhost:3306/rentcar_db?serverTimezone=Europe/Moscow&useSSL=false";
     private static final String root="root";
     private static final String password="qw12QW34";
-
 
     /**
      * Show all cars from database
@@ -73,7 +78,7 @@ public class CarDB {
      * @throws SQLException
      */
     public static int addCar(Car car) {
-        String sql="INSERT INTO cars (id, brand, model, type, price, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql="INSERT INTO cars (id, brand, model, price, status) VALUES (?, ?, ?, ?, ?)";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try(Connection conn=DriverManager.getConnection(url,root,password)) {
@@ -81,9 +86,8 @@ public class CarDB {
                     preparedStatement.setInt(1,car.getId());
                     preparedStatement.setString(2,car.getName());
                     preparedStatement.setString(3,car.getModel());
-                    preparedStatement.setString(4,car.getType());
-                    preparedStatement.setInt(5,car.getPrice());
-                    preparedStatement.setString(6,car.getStatus().toString().toLowerCase());
+                    preparedStatement.setInt(4,car.getPrice());
+                    preparedStatement.setString(5,car.getStatus().toString().toLowerCase());
                     return preparedStatement.executeUpdate();
                 }
             }
@@ -121,17 +125,16 @@ public class CarDB {
      * @throws SQLException
      */
     public static void updateCar(Car car) {
-        String sql="UPDATE cars SET brand=?, model=?, type=?, price=?, status=? WHERE id=?";
+        String sql="UPDATE cars SET brand=?, model=?, price=?, status=? WHERE id=?";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try(Connection conn=DriverManager.getConnection(url,root,password)) {
                 try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
-                    preparedStatement.setInt(6,car.getId());
+                    preparedStatement.setInt(5,car.getId());
                     preparedStatement.setString(1,car.getName());
                     preparedStatement.setString(2,car.getModel());
-                    preparedStatement.setString(3,car.getType());
-                    preparedStatement.setInt(4,car.getPrice());
-                    preparedStatement.setString(5,car.getStatus().toString().toLowerCase());
+                    preparedStatement.setInt(3,car.getPrice());
+                    preparedStatement.setString(4,car.getStatus().toString().toLowerCase());
                     preparedStatement.executeUpdate();
                 }
             }
@@ -145,9 +148,9 @@ public class CarDB {
         car.setId(resultSet.getInt(1));
         car.setName(resultSet.getString(2));
         car.setModel(resultSet.getString(3));
-        car.setType(resultSet.getString(4));
-        car.setPrice(resultSet.getInt(5));
-        String status=resultSet.getString(6);
+        car.setPrice(resultSet.getInt(4));
+        String status=resultSet.getString(5);
+
         switch (status){
             case "free": { car.setStatus(CarStatus.FREE); break; }
             case "selected": { car.setStatus(CarStatus.SELECTED); break; }

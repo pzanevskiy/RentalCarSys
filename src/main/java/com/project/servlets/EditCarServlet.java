@@ -24,7 +24,6 @@ public class EditCarServlet extends HttpServlet {
         car= CarDB.getCarById(id);
         car.setName(request.getParameter("brand"));
         car.setModel(request.getParameter("model"));
-        car.setType(request.getParameter("type"));
         car.setPrice(Integer.parseInt(request.getParameter("price")));
         String status=request.getParameter("status").toLowerCase();
         switch (status){

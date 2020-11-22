@@ -32,7 +32,6 @@
             <p>Car</p>
             <p>Brand: ${order.car.name}</p>
             <p>Model: ${order.car.model}</p>
-            <p>Type: ${order.car.type}</p>
             <p>Price: ${order.car.price}</p>
         </div>
         <div class="view_content1">
