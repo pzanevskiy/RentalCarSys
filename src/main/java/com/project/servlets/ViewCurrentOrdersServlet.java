@@ -4,7 +4,6 @@ import com.project.DB.OrderDB;
 import com.project.entities.Order;
 import com.project.entities.User;
 import com.project.enums.OrderStatus;
-import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,14 +18,12 @@ import java.util.ArrayList;
 
 @WebServlet("/ViewCurrentOrdersServlet")
 public class ViewCurrentOrdersServlet extends HttpServlet {
-    private static final Logger LOG=Logger.getLogger(ViewCurrentOrdersServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id=Integer.parseInt(request.getParameter("id"));
         Order order=null;
         order=OrderDB.getOrderById(id);
         order.setStatus(OrderStatus.RETURNED);
         OrderDB.updateOrderStatus(order);
-        LOG.info("user "+order.getUser().getName()+" return car "+order.getCar().getName());
         response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
     }
 

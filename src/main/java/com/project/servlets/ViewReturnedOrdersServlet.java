@@ -3,7 +3,6 @@ package com.project.servlets;
 import com.project.DB.OrderDB;
 import com.project.entities.Order;
 import com.project.enums.OrderStatus;
-import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 
 @WebServlet("/ViewReturnedOrdersServlet")
 public class ViewReturnedOrdersServlet extends HttpServlet {
-    private static final Logger LOG= Logger.getLogger(ViewReturnedOrdersServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id=Integer.parseInt(request.getParameter("id"));
         Order order=null;
@@ -31,13 +29,11 @@ public class ViewReturnedOrdersServlet extends HttpServlet {
                 order.setRepairPrice(repairPrice);
                 order.setMessage(msg);
                 OrderDB.updateOrderStatusRep(order);
-                LOG.info("order "+ order.getId()+" change status to repair");
                 break;
             }
             case "completed":{
                 order.setStatus(OrderStatus.COMPLETED);
                 OrderDB.updateOrderStatus(order);
-                LOG.info("user "+order.getUser().getName()+" complete order "+order.getId());
                 break;
             }
             default:{

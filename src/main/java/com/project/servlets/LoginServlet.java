@@ -3,7 +3,6 @@ package com.project.servlets;
 import com.project.DB.UserDB;
 import com.project.entities.User;
 import com.project.enums.UserStatus;
-import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-    private static final Logger LOG=Logger.getLogger(LoginServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String email=request.getParameter("email");
@@ -39,19 +37,16 @@ public class LoginServlet extends HttpServlet {
             switch (status){
                 case USER:{
                     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/user.jsp");
-                    LOG.info("user "+user.getName()+" entered");
                     dispatcher.forward(request, response);
                     break;
                 }
                 case ADMIN:{
                     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/admin.jsp");
-                    LOG.info("admin "+user.getName()+" entered");
                     dispatcher.forward(request, response);
                     break;
                 }
                 case BANNED:{
                     String path=request.getContextPath();
-                    LOG.info("banned user try to enter");
                     response.sendRedirect(path);
                     break;
                 }

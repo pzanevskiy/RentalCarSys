@@ -5,7 +5,6 @@ import com.project.DB.UserDB;
 import com.project.entities.Order;
 import com.project.entities.User;
 import com.project.enums.OrderStatus;
-import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 
 @WebServlet("/ViewInvoicesServlet")
 public class ViewInvoicesServlet extends HttpServlet {
-    private static final Logger LOG= Logger.getLogger(ViewInvoicesServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         int id=Integer.parseInt(request.getParameter("id"));
@@ -34,7 +32,6 @@ public class ViewInvoicesServlet extends HttpServlet {
         user.setMoney(userMoney);
         UserDB.updateUser(user);
         OrderDB.updateOrderStatus(order);
-        LOG.info("user "+user.getName()+" pay for invoice and complete order "+order.getId());
         response.sendRedirect(request.getContextPath()+"/ViewInvoicesServlet");
     }
 

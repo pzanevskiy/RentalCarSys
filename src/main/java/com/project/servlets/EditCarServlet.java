@@ -34,7 +34,7 @@ public class EditCarServlet extends HttpServlet {
         }
 
         CarDB.updateCar(car);
-        LOG.info("car "+car.getName()+" "+car.getModel()+" info changed");
+        LOG.info("car "+car.getId()+" upd");
         response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");
     }
 

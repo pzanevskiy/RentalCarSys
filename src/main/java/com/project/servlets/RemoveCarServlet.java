@@ -20,7 +20,6 @@ public class RemoveCarServlet extends HttpServlet {
 
         int id=Integer.parseInt(request.getParameter("id"));
         Car car=CarDB.getCarById(id);
-        LOG.info("car "+car.getName()+" "+car.getModel()+" removed");
         CarDB.removeCar(id);
         LOG.info("car "+car.getId()+" removed");
         response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");
