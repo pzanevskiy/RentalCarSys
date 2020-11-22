@@ -63,7 +63,30 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        UserStatus status=null;
+        status=user.getStatus();
+        switch (status){
+            case USER:{
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/user.jsp");
+                dispatcher.forward(request, response);
+                break;
+            }
+            case ADMIN:{
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/admin.jsp");
+                dispatcher.forward(request, response);
+                break;
+            }
+            case BANNED:{
+                String path=request.getContextPath();
+                response.sendRedirect(path);
+                break;
+            }
+            default:{
+                break;
+            }
+        }
 
     }
 }

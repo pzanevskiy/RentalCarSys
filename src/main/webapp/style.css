@@ -30,7 +30,7 @@ header a {
 .admin_menu {
     z-index: 2;
     text-align: center;
-    background:cornflowerblue;
+    background: #6495ed;
     position: sticky;
     padding: 5px;
     top: 0;
