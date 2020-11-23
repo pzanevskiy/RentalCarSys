@@ -18,13 +18,16 @@ import com.project.entities.User;
 @WebServlet("/ViewCarsServlet")
 public class ViewCarsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session=request.getSession();
+       // String value=request.getParameter("val");
         User user=(User)session.getAttribute("user");
         ArrayList<Car> cars=null;
+        //cars=CarDB.getCarsByBrand(value);
         cars=CarDB.getCars();
         request.setAttribute("cars",cars);
         RequestDispatcher dispatcher=null;

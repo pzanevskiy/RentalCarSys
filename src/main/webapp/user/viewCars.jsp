@@ -15,7 +15,7 @@
 <body>
 <jsp:include page="user.jsp"/>
     <div class="container">
-        <div class="row row-cols-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 ">
             <c:forEach var="item" items="${cars}">
                 <div class="col p-2">
                     <div class="card" >

@@ -71,6 +71,70 @@ public class CarDB {
         return car;
     }
 
+    public static ArrayList<Car> getCarsByBrand(String brand) {
+        ArrayList<Car> cars=new ArrayList<>();
+        String sql="SELECT * FROM cars WHERE brand=?";
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try(Connection conn=DriverManager.getConnection(url,root,password)) {
+                try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
+                    preparedStatement.setString(1,brand);
+                    ResultSet resultSet=preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                        Car car = getCar(resultSet);
+                        cars.add(car);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cars;
+    }
+
+    public static ArrayList<Car> getCarsByBrandWithRange(String brand,int range) {
+        ArrayList<Car> cars=new ArrayList<>();
+        String sql="SELECT * FROM cars WHERE brand=? AND price<?";
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try(Connection conn=DriverManager.getConnection(url,root,password)) {
+                try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
+                    preparedStatement.setString(1,brand);
+                    preparedStatement.setInt(2,range);
+                    ResultSet resultSet=preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                        Car car = getCar(resultSet);
+                        cars.add(car);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cars;
+    }
+
+    public static ArrayList<Car> getCarsByRange(int range) {
+        ArrayList<Car> cars=new ArrayList<>();
+        String sql="SELECT * FROM cars WHERE price<?";
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try(Connection conn=DriverManager.getConnection(url,root,password)) {
+                try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
+                    preparedStatement.setInt(1,range);
+                    ResultSet resultSet=preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                        Car car = getCar(resultSet);
+                        cars.add(car);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cars;
+    }
+
     /**
      * Adds new car to database
      * @param car car object
