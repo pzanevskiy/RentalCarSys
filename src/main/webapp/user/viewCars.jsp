@@ -20,23 +20,67 @@
                 <div class="col p-2">
                     <div class="card" >
                         <div class="card-header">
-                            <h4 class="card-title">${item.name}</h4>
+                            <h4 id="brand${item.id}" class="card-title">${item.name}</h4>
                         </div>
                         <div class="card-body">
-                            <p>Model: ${item.model}</p>
-                            <p>Price: ${item.price}$</p>
+                            <p id="model${item.id}">Model: ${item.model}</p>
+                            <p id="price${item.id}">Price: ${item.price}$</p>
                             <p>Status: ${item.status}</p>
-                            <form action="RentCarServlet">
-                                <input type="hidden" name="id" value="${item.id}">
-                                <button id="btn1" class="btn btn-dark border border-dark rounded-pill stretched-link" type="submit">
-                                    Rent car
-                                </button>
-                            </form>
+<%--                            <form>--%>
+<%--                            <form action="RentCarServlet">--%>
+<%--                                <input type="hidden" name="id" value="${item.id}">--%>
+<%--                                <button id="btn1" class="btn btn-dark border border-dark rounded-pill"--%>
+<%--                                        type="submit" >--%>
+<%--                                    Rent car--%>
+<%--                                </button>--%>
+<%--                            </form>--%>
+                            <button id="${item.id}" class="btn btn-dark border border-dark rounded-pill stretched-link"
+                                    type="button"  data-toggle="modal" data-target="#exampleModal" onclick="upd(${item.id})">
+                                Rent car
+                            </button>
                         </div>
                     </div>
                 </div>
             </c:forEach>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalBrand"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="RentCarServlet" method="post">
+                            <p id="modalModel">Model: </p>
+                            <p id="modalPrice">Price: </p>
+                            <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>
+                            <p>
+                                <input type="hidden" id="modalId" name="id" value="">
+                                <input type="submit" value="Rent car" class="button">
+<%--                                <a href="ViewCarsServlet"><input type="button" value="Back to store"></a>--%>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+<script>
+function upd(id) {
+    document.getElementById("modalBrand").textContent=document.getElementById("brand"+id).textContent;
+    document.getElementById("modalModel").textContent=document.getElementById("model"+id).textContent;
+    document.getElementById("modalPrice").textContent=document.getElementById("price"+id).textContent;
+    var inp=document.getElementById("modalId");
+    inp.setAttribute("value",id);
+}
+</script>
 </html>
