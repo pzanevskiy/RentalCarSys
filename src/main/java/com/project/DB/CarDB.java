@@ -143,6 +143,25 @@ public class CarDB {
         }
     }
 
+    public static ArrayList<String> getDistinctCarNames(){
+        ArrayList<String> names = new ArrayList<>();
+        String sql="SELECT DISTINCT brand FROM cars";
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try(Connection conn= DriverManager.getConnection(url,root,password)) {
+                Statement statement=conn.createStatement();
+                ResultSet resultSet=statement.executeQuery(sql);
+                while (resultSet.next()){
+                    String name = resultSet.getString(1);
+                    names.add(name);
+                }
+            }
+        } catch (Exception ex){
+
+        }
+        return names;
+    }
+
     private static Car getCar(ResultSet resultSet) throws SQLException{
         Car car=new Car();
         car.setId(resultSet.getInt(1));

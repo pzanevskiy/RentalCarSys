@@ -36,6 +36,7 @@
                     Menu
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="PreselectServlet">Select</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCarsServlet">View cars</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewAwaitOrdersServlet">View awaiting orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCurrentOrdersServlet">View current orders</a>
