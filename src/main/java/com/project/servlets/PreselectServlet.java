@@ -19,12 +19,19 @@ public class PreselectServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession();
         String value="";
-        value=request.getParameter("val");
         int range=0;
+        try{
+            value=(String)session.getAttribute("value");
+            range=(Integer)session.getAttribute("range");
+        }catch (Exception e) { }
+        value=request.getParameter("val");
         try{
             range=Integer.parseInt(request.getParameter("range"));
 
         }catch (Exception e) { }
+
+        session.setAttribute("value",value);
+        session.setAttribute("range",range);
         User user=(User)session.getAttribute("user");
         ArrayList<Car> cars=null;
         if(value!="" && range==0){

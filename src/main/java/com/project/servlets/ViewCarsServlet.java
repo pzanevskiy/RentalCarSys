@@ -24,19 +24,39 @@ public class ViewCarsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session=request.getSession();
-       // String value=request.getParameter("val");
+
         User user=(User)session.getAttribute("user");
         ArrayList<Car> cars=null;
-        //cars=CarDB.getCarsByBrand(value);
-        cars=CarDB.getCars();
-        request.setAttribute("cars",cars);
+
         RequestDispatcher dispatcher=null;
         switch (user.getStatus()){
             case USER:{
+                String value="";
+                int range=0;
+                try{
+                    value=(String)session.getAttribute("value");
+                    range=(Integer)session.getAttribute("range");
+                }catch (Exception e) { value=""; range=0;}
+
+                session.setAttribute("value",value);
+                session.setAttribute("range",range);
+                if(value=="" && range==0){
+                    cars=CarDB.getCars();
+                }
+                if(value!="" && range==0){
+                    cars=CarDB.getCarsByBrand(value);
+                }
+                if(value=="" && range>10){
+                    cars=CarDB.getCarsByRange(range);
+                }
+                if(value!="" && range>10){
+                    cars=CarDB.getCarsByBrandWithRange(value,range);
+                }
                 dispatcher = getServletContext()
                         .getRequestDispatcher("/user/viewCars.jsp"); break;
             }
             case ADMIN:{
+                 cars=CarDB.getCars();
                  dispatcher = getServletContext()
                         .getRequestDispatcher("/admin/viewCars.jsp"); break;
             }
@@ -44,6 +64,7 @@ public class ViewCarsServlet extends HttpServlet {
                 break;
             }
         }
+        request.setAttribute("cars",cars);
         dispatcher.forward(request, response);
     }
 }

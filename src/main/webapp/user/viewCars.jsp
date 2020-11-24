@@ -53,22 +53,20 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <form action="RentCarServlet" method="post">
+
                     <div class="modal-body">
-                        <form action="RentCarServlet" method="post">
-                            <p id="modalModel">Model: </p>
-                            <p id="modalPrice">Price: </p>
-                            <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>
-                            <p>
-                                <input type="hidden" id="modalId" name="id" value="">
-                                <input type="submit" value="Rent car" class="button">
-<%--                                <a href="ViewCarsServlet"><input type="button" value="Back to store"></a>--%>
-                            </p>
-                        </form>
+                        <p id="modalModel">Model: </p>
+                        <p id="modalPrice">Price: </p>
+                        <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Save changes</button>
+                        <input type="hidden" id="modalId" name="id" value="">
+                        <input type="submit" value="Rent car" class="btn btn-primary">
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
