@@ -22,7 +22,7 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
-        int id=Integer.parseInt(request.getParameter("id"));
+        int id=Integer.parseInt(request.getParameter("ids"));
         switch (user.getStatus()){
             case ADMIN:{
                 String status=request.getParameter("status");

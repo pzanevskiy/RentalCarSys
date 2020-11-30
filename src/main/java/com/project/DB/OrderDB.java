@@ -110,8 +110,8 @@ public class OrderDB {
      */
     public static int addOrder(Order order){
 
-        String sql="INSERT INTO orders (Id, user_id, car_id, status, repair_price, duration, message, begin) " +
-                "VALUES (?, ?, ?, ?, ?, ? ,?, ?)";
+        String sql="INSERT INTO orders (Id, user_id, car_id, status, repair_price, duration, message, begin, end) " +
+                "VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?)";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try(Connection conn=DriverManager.getConnection(url,root,password)) {
@@ -123,7 +123,8 @@ public class OrderDB {
                     preparedStatement.setInt(5,0);
                     preparedStatement.setInt(6,order.getDuration());
                     preparedStatement.setString(7,"");
-                    preparedStatement.setString(8,order.getDate());
+                    preparedStatement.setString(8,order.getStartDate());
+                    preparedStatement.setString(9,order.getEndDate());
                     return preparedStatement.executeUpdate();
                 }
             }
@@ -229,7 +230,8 @@ public class OrderDB {
         order.setRepairPrice(resultSet.getInt(5));
         order.setDuration(resultSet.getInt(6));
         order.setMessage(resultSet.getString(7));
-        order.setDate(resultSet.getString(8));
+        order.setStartDate(resultSet.getString(8));
+        order.setEndDate(resultSet.getString(9));
         return order;
     }
 }
