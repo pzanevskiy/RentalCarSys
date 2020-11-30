@@ -69,11 +69,11 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-sm-6">
-                <a class="btn btn-outline-success rounded-pill text-center" href="PreselectServlet">Go to new cars</a>
+            <div class="col-sm-12 text-center m-1">
+                <a class="btn btn-outline-success rounded-pill" href="PreselectServlet">Go to new cars</a>
             </div>
-            <div class="col-sm-6">
-                <a class="btn btn-outline-success rounded-pill text-center" href="ViewCarsServlet">Continue with current filters</a>
+            <div class="col-sm-12 text-center m-1">
+                <a class="btn btn-outline-success rounded-pill" href="ViewCarsServlet">Continue with current filters</a>
             </div>
         </div>
     </div>

@@ -23,8 +23,8 @@
                             <h4 id="brand${item.id}" class="card-title">${item.name}</h4>
                         </div>
                         <div class="card-body">
-                            <p id="model${item.id}">Model: ${item.model}</p>
-                            <p id="price${item.id}">Price: ${item.price}$</p>
+                            <p>Model:<span id="model${item.id}"> ${item.model}</span> </p>
+                            <p>Price:<span id="price${item.id}"> ${item.price}$</span> </p>
                             <p>Status: ${item.status}</p>
 <%--                            <form>--%>
 <%--                            <form action="RentCarServlet">--%>
@@ -54,11 +54,29 @@
                         </button>
                     </div>
                     <form action="RentCarServlet" method="post">
-
                     <div class="modal-body">
-                        <p id="modalModel">Model: </p>
-                        <p id="modalPrice">Price: </p>
-                        <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>
+<%--                        <p id="modalModel">Model: </p>--%>
+                        <div class="mb-3 row">
+                            <label for="modalModel" class="col-sm-2 col-form-label">Model</label>
+                            <div class="col-sm-10">
+                                <input type="text" disabled class="form-control-plaintext" id="modalModel" value="">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="modalPrice" class="col-sm-2 col-form-label">Price</label>
+                            <div class="col-sm-10">
+                                    <input type="text" disabled class="form-control-plaintext" id="modalPrice" value="">
+                            </div>
+                        </div>
+<%--                        <p id="modalPrice">Price: </p>--%>
+                        <div class="mb-3 row">
+                            <label for="modalDur" class="col-sm-2 col-form-label">Duration</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}" required class="form-control" id="modalDur">
+                            </div>
+                        </div>
+
+<%--                        <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>--%>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -74,8 +92,8 @@
 <script>
 function upd(id) {
     document.getElementById("modalBrand").textContent=document.getElementById("brand"+id).textContent;
-    document.getElementById("modalModel").textContent=document.getElementById("model"+id).textContent;
-    document.getElementById("modalPrice").textContent=document.getElementById("price"+id).textContent;
+    document.getElementById("modalModel").value=document.getElementById("model"+id).textContent;
+    document.getElementById("modalPrice").value=document.getElementById("price"+id).textContent;
     var inp=document.getElementById("modalId");
     inp.setAttribute("value",id);
 }
