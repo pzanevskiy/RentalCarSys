@@ -27,7 +27,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="LoginServlet">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="LoginServlet">Home</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="PreselectServlet">Filters</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="ViewCarsServlet">View cars</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white"  id="navbarDropdown" role="button"
@@ -35,8 +41,6 @@
                     Menu
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="PreselectServlet">Select</a>
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCarsServlet">View cars</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewAwaitOrdersServlet">View awaiting orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCurrentOrdersServlet">View current orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCanceledOrdersServlet">View canceled orders</a>
@@ -54,6 +58,11 @@
             <div class="col-auto">
                 <a class="navbar-text text-white" style="text-decoration: none;">
                     <span class="font-weight-bold">Email: ${user.email}</span>
+                </a>
+            </div>
+            <div class="col-auto">
+                <a class="navbar-text text-white" style="text-decoration: none;">
+                    <span class="font-weight-bold">Money: ${user.money}</span>
                 </a>
             </div>
             <div class="col-auto">

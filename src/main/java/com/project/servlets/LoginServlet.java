@@ -60,11 +60,13 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
+        user=UserDB.getUserById(user.getId());
         UserStatus status=null;
         status=user.getStatus();
         switch (status){
             case USER:{
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/user.jsp");
+                session.setAttribute("user",user);
                 dispatcher.forward(request, response);
                 break;
             }

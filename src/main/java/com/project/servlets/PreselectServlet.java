@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import com.project.DB.CarDB;
+import com.project.DB.UserDB;
 import com.project.entities.Car;
 import com.project.entities.User;
 
@@ -34,6 +35,7 @@ public class PreselectServlet extends HttpServlet {
         session.setAttribute("range",range);
         User user=(User)session.getAttribute("user");
         ArrayList<Car> cars=null;
+        cars=CarDB.getCars();
         if(value!="" && range==0){
             cars=CarDB.getCarsByBrand(value);
         }
@@ -44,7 +46,7 @@ public class PreselectServlet extends HttpServlet {
             cars=CarDB.getCarsByBrandWithRange(value,range);
         }
 
-       // cars=CarDB.getCars();
+
         request.setAttribute("cars",cars);
         RequestDispatcher dispatcher=null;
         switch (user.getStatus()){
@@ -69,7 +71,11 @@ public class PreselectServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession();
+        session.removeAttribute("value");
+        session.removeAttribute("range");
         User user=(User)session.getAttribute("user");
+        user= UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         ArrayList<String> names= CarDB.getDistinctCarNames();
         request.setAttribute("names",names);
         RequestDispatcher dispatcher=getServletContext().getRequestDispatcher("/user/preselectCars.jsp");

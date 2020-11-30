@@ -75,7 +75,6 @@
                                 <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}" required class="form-control" id="modalDur">
                             </div>
                         </div>
-
 <%--                        <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>--%>
                     </div>
                     <div class="modal-footer">

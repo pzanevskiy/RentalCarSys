@@ -27,7 +27,8 @@ public class ViewCarsServlet extends HttpServlet {
 
         User user=(User)session.getAttribute("user");
         ArrayList<Car> cars=null;
-
+        user=UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         RequestDispatcher dispatcher=null;
         switch (user.getStatus()){
             case USER:{
