@@ -11,11 +11,12 @@ public class Order {
     private int repairPrice;
     private int duration;
     private String message;
+    private String date;
 
     public Order() {
     }
 
-    public Order(int id, User user, Car car, OrderStatus status,int repairPrice,int duration,String message) {
+    public Order(int id, User user, Car car, OrderStatus status,int repairPrice,int duration,String message, String date) {
         this.id = id;
         this.user = user;
         this.car = car;
@@ -23,6 +24,7 @@ public class Order {
         this.repairPrice=repairPrice;
         this.duration=duration;
         this.message=message;
+        this.date=date;
     }
 
     public int getId() {
@@ -79,5 +81,13 @@ public class Order {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
