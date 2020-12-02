@@ -41,6 +41,7 @@
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewUsersServlet">View users list</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewAwaitOrdersServlet">View awaiting orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCanceledOrdersServlet">View canceled orders</a>
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCurrentOrdersServlet">View current orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewReturnedOrdersServlet">View returned orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewComplOrdersServlet">View completed orders</a>
                     <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewInvoicesServlet">View invoices for auto repair</a>

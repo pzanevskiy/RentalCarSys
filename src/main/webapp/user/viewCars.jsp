@@ -68,14 +68,12 @@
                                     <input type="text" disabled class="form-control-plaintext" id="modalPrice" value="">
                             </div>
                         </div>
-<%--                        <p id="modalPrice">Price: </p>--%>
                         <div class="mb-3 row">
                             <label for="modalDur" class="col-sm-2 col-form-label">Duration</label>
                             <div class="col-sm-10">
                                 <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}" required class="form-control" id="modalDur">
                             </div>
                         </div>
-<%--                        <p>Duration: <input type="text" name="dur" autocomplete="off" pattern="[0-9]{1,}"></p>--%>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -2,9 +2,12 @@ package com.project.servlets;
 
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
+import com.project.Service.DateService;
 import com.project.entities.Order;
 import com.project.entities.User;
 import com.project.enums.OrderStatus;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,6 +34,9 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                 switch (status){
                     case "accept":{
                         order.setStatus(OrderStatus.IN_PROCESS);
+                        LocalDateTime localDateTime=LocalDateTime.now(DateTimeZone.forID("Europe/Minsk"));
+                        order.setStartDate(DateService.getParsedDate(localDateTime));
+                        order.setEndDate(DateService.getParsedDate(DateService.getAfterDurationDateTime(localDateTime,order.getDuration())));
                         int dur=order.getDuration();
                         int carPrice=order.getCar().getPrice();
                         int userMoney=order.getUser().getMoney();
@@ -39,6 +45,7 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                         userP.setMoney(finalMoney);
                         UserDB.updateUser(userP);
                         OrderDB.updateOrderStatus(order);
+                        OrderDB.updateOrderDates(order);
                         break;
                     }
                     case "reject":{

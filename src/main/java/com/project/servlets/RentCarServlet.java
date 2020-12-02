@@ -46,11 +46,6 @@ public class RentCarServlet extends HttpServlet {
             order.setCar(car);
             order.setStatus(OrderStatus.AWAITING);
             order.setDuration(dur); /*Integer.parseInt(request.getParameter("dur"))*/
-            LocalDateTime localDateTime=LocalDateTime.now(DateTimeZone.forID("Europe/Minsk"));
-            order.setStartDate(DateService.getParsedDate(localDateTime));
-            session.setAttribute("begin",DateService.getParsedDate(localDateTime));
-            session.setAttribute("end",DateService.getParsedDate(DateService.getAfterDurationDateTime(localDateTime,dur)));
-            order.setEndDate(DateService.getParsedDate(DateService.getAfterDurationDateTime(localDateTime,dur)));
             OrderDB.addOrder(order);
             LOG.info(user.getName()+" rent "+car.getName()+" "+car.getModel());
         }

@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Павел
-  Date: 18.05.2020
-  Time: 17:58
+  User: Pavel
+  Date: 02.12.2020
+  Time: 15:44
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -10,10 +10,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>List of orders</title>
+    <title>All current orders</title>
 </head>
 <body>
-<jsp:include page="user.jsp" />
+<jsp:include page="admin.jsp" />
 <div class="container my-3 mx-auto">
     <div class="accordion" id="accordionExample">
         <c:forEach var="order" items="${orders}">
@@ -25,6 +25,8 @@
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-2">
                                 <div class="col">Invoice#${order.id}</div>
                                 <div class="col">Car - ${order.car.name}</div>
+                                <div class="col">Rent's start - ${order.startDate}</div>
+                                <div class="col">Rent's end - ${order.endDate}</div>
                             </div>
                         </button>
                     </h2>
@@ -106,8 +108,38 @@
                                                     <input type="text" disabled class="form-control-plaintext" id="orderStatus" value="${order.status}">
                                                 </div>
                                             </div>
+                                            <div class="mb-1 row">
+                                                <label for="start" class="col col-form-label">Rent's start</label>
+                                                <div class="col">
+                                                    <input type="text" disabled class="form-control-plaintext" id="start" value="${order.startDate}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 row">
+                                                <label for="end" class="col col-form-label">Rent's end</label>
+                                                <div class="col">
+                                                    <input type="text" disabled class="form-control-plaintext" id="end" value="${order.endDate}">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row row-cols-sm-2 row-cols-xl-2">
+                                <div class="col text-center">
+                                    <form action="" method="post">
+                                        <input type="hidden" name="id" value="${order.id}"/>
+                                        <input type="hidden" name="status" value="complete">
+                                        <input type="submit" value="Complete order" class="btn btn-success">
+                                    </form>
+                                </div>
+                                <div class="col text-center">
+                                    <form action="AddInvoiceServlet">
+                                        <input type="hidden" name="id" value="${order.id}"/>
+                                        <input type="hidden" name="status" value="invoice">
+                                        <input type="submit" value="Invoice order" class="btn btn-danger">
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -117,5 +149,6 @@
         </c:forEach>
     </div>
 </div>
+
 </body>
 </html>

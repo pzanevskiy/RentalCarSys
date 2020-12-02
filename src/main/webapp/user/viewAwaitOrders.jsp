@@ -15,7 +15,6 @@
 <body>
 <jsp:include page="user.jsp" />
 <div class="container my-3 mx-auto">
-
     <div class="accordion" id="accordionExample">
        <c:forEach var="order" items="${orders}">
            <div class="card bg-light border border-success my-1 rounded">
@@ -23,10 +22,9 @@
                    <h2 class="m-1">
                        <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" style="text-decoration: none;"
                                data-target="#collapse${order.id}" aria-expanded="false" aria-controls="collapse${order.id}">
-                           <div class="row row-cols-sm-1 row-cols-xl-3">
+                           <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-2">
                                <div class="col">Invoice#${order.id}</div>
                                <div class="col">Car - ${order.car.name}</div>
-                               <div class="col">Rent's end - ${order.endDate}</div>
                            </div>
                        </button>
                    </h2>
@@ -35,7 +33,7 @@
                <div id="collapse${order.id}" class="collapse" aria-labelledby="heading${order.id}" data-parent="#accordionExample">
                    <div class="card">
                    <div class="card-body">
-                       <div class="row mb-2 row-cols-xl-1">
+                       <div class="row mb-2 row-cols-1 row-cols-xl-1">
                            <div class="col p-1">
                                <div class="card" >
                                    <div class="card-header">
@@ -97,17 +95,23 @@
                                        </div>
                                    </div>
                                    <div class="mb-1 row">
-                                       <label for="begin" class="col col-form-label">Rent's start</label>
+                                       <label for="total" class="col col-form-label">Total price</label>
                                        <div class="col">
-                                           <input type="text" disabled class="form-control-plaintext" id="begin" value="${order.startDate}">
+                                           <input type="text" disabled class="form-control-plaintext" id="total" value="${order.duration * order.car.price}$">
                                        </div>
                                    </div>
                                    <div class="mb-1 row">
-                                       <label for="end" class="col col-form-label">Rent's end</label>
+                                       <label for="orderStatus" class="col col-form-label">Order status</label>
                                        <div class="col">
-                                           <input type="text" disabled class="form-control-plaintext" id="end" value="${order.endDate}">
+                                           <input type="text" disabled class="form-control-plaintext" id="orderStatus" value="${order.status}">
                                        </div>
                                    </div>
+<%--                                   <div class="mb-1 row">--%>
+<%--                                       <label for="end" class="col col-form-label">Rent's end</label>--%>
+<%--                                       <div class="col">--%>
+<%--                                           <input type="text" disabled class="form-control-plaintext" id="end" value="${order.endDate}">--%>
+<%--                                       </div>--%>
+<%--                                   </div>--%>
                                </div>
                                </div>
                            </div>

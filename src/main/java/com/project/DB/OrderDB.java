@@ -110,7 +110,7 @@ public class OrderDB {
      */
     public static int addOrder(Order order){
 
-        String sql="INSERT INTO orders (Id, user_id, car_id, status, repair_price, duration, message, begin, end) " +
+        String sql="INSERT INTO orders (Id, user_id, car_id, status, repair_price, duration, message, startD, endD) " +
                 "VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?)";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
@@ -167,6 +167,23 @@ public class OrderDB {
                 try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
                     preparedStatement.setString(1,order.getStatus().toString().toLowerCase());
                     preparedStatement.setInt(2,order.getId());
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateOrderDates(Order order){
+        String sql="UPDATE orders SET startD=?, endD=? WHERE Id=?";
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try(Connection conn=DriverManager.getConnection(url,root,password)) {
+                try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
+                    preparedStatement.setString(1,order.getStartDate());
+                    preparedStatement.setString(2,order.getEndDate());
+                    preparedStatement.setInt(3,order.getId());
                     preparedStatement.executeUpdate();
                 }
             }
