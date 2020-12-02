@@ -21,7 +21,7 @@
             <p>ID: ${order.id}</p>
             <p>Duration: ${order.duration}</p>
             <p>Repair price: <input type="text" name="repair" autocomplete="off" pattern="[0-9]{1,}"></p>
-            <p>Message: <input type="text" name="msg" autocomplete="off" pattern="^[a-zA-Z]+$"></p>
+            <p>Message: <input type="text" name="msg" autocomplete="off"></p>
             <p>
                 <input type="hidden" name="id" value="${order.id}">
                 <input type="submit" value="Send invoice" class="button">

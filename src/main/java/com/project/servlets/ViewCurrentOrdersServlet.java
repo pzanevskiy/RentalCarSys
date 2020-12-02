@@ -39,11 +39,16 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
                         response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
                         break;
                     }
-//                    case "invoice":{
-//                        session.setAttribute("id",id);
-//                        response.sendRedirect(request.getContextPath()+"/AddInvoiceServlet");
-//                        break;
-//                    }
+                    case "invoice":{
+                        int repairPrice=Integer.parseInt(request.getParameter("repair"));
+                        String msg=request.getParameter("msg");
+                        order.setStatus(OrderStatus.REPAIR);
+                        order.setRepairPrice(repairPrice);
+                        order.setMessage(msg);
+                        OrderDB.updateOrderStatusRep(order);
+                        response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
+                        break;
+                    }
                     default:{
                         break;
                     }

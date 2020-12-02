@@ -23,7 +23,7 @@
                         <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" style="text-decoration: none;"
                                 data-target="#collapse${order.id}" aria-expanded="false" aria-controls="collapse${order.id}">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-2">
-                                <div class="col">Invoice#${order.id}</div>
+                                <div class="col">Invoice#<span id="order${order.id}">${order.id}</span></div>
                                 <div class="col">Car - ${order.car.name}</div>
                                 <div class="col">Rent's start - ${order.startDate}</div>
                                 <div class="col">Rent's end - ${order.endDate}</div>
@@ -135,11 +135,10 @@
                                     </form>
                                 </div>
                                 <div class="col text-center">
-                                    <form action="AddInvoiceServlet">
-                                        <input type="hidden" name="id" value="${order.id}"/>
-                                        <input type="hidden" name="status" value="invoice">
-                                        <input type="submit" value="Invoice order" class="btn btn-danger">
-                                    </form>
+                                    <button id="${order.id}" class="btn btn-danger"
+                                            type="button"  data-toggle="modal" data-target="#exampleModal" onclick="upd(${order.id})">
+                                        Invoice order
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -149,6 +148,53 @@
         </c:forEach>
     </div>
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method="post">
+                <div class="modal-body">
+                    <div class="mb-3 row">
+                        <label for="modalOrderID" class="col col-form-label">ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" disabled class="form-control-plaintext" id="modalOrderID" value="">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="modalPen" class="col-sm-2 col-form-label">Penalty</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="repair" autocomplete="off" required class="form-control" id="modalPen">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="modalMsg" class="col-sm-2 col-form-label">Message</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="msg" autocomplete="off" class="form-control" id="modalMsg" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="hidden" id="modalId" name="id" value="">
+                    <input type="hidden" name="status" value="invoice">
+                    <input type="submit" value="Send invoice" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
+<script>
+    function upd(id) {
+        document.getElementById("modalOrderID").value=document.getElementById("order"+id).textContent;
+        var inp=document.getElementById("modalId");
+        inp.setAttribute("value",id);
+    }
+</script>
 </html>

@@ -22,16 +22,16 @@ public class ViewReturnedOrdersServlet extends HttpServlet {
         order=OrderDB.getOrderById(id);
         String status=request.getParameter("status");
         switch (status){
-            case "repair":{
+            case "invoice":{
                 int repairPrice=Integer.parseInt(request.getParameter("repair"));
-                String msg=request.getParameter("message");
+                String msg=request.getParameter("msg");
                 order.setStatus(OrderStatus.REPAIR);
                 order.setRepairPrice(repairPrice);
                 order.setMessage(msg);
                 OrderDB.updateOrderStatusRep(order);
                 break;
             }
-            case "completed":{
+            case "complete":{
                 order.setStatus(OrderStatus.COMPLETED);
                 OrderDB.updateOrderStatus(order);
                 break;
