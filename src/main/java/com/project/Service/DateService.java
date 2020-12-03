@@ -1,6 +1,7 @@
 package com.project.Service;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
@@ -59,5 +60,12 @@ public class DateService {
         DateTimeFormatter dateTimeFormatter= DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
         DateTime dateTime=DateTime.parse(s,dateTimeFormatter);
         return dateTime;
+    }
+
+    public static int getDaysDifference(String endDate){
+        LocalDateTime localDateTime=LocalDateTime.now();
+        DateTime currentDateTime =parseToDateTime(getParsedDate(localDateTime));
+        DateTime endDateTime=parseToDateTime(endDate);
+        return Days.daysBetween(endDateTime,currentDateTime).getDays();
     }
 }

@@ -1,9 +1,12 @@
 package com.project.servlets;
 
+import com.project.DB.InvoiceDB;
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
+import com.project.entities.Invoice;
 import com.project.entities.Order;
 import com.project.entities.User;
+import com.project.enums.InvoiceStatus;
 import com.project.enums.OrderStatus;
 
 import javax.servlet.RequestDispatcher;
@@ -16,22 +19,23 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/ViewInvoicesServlet")
 public class ViewInvoicesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session=request.getSession();
         int id=Integer.parseInt(request.getParameter("id"));
-        Order order =null;
-        order=OrderDB.getOrderById(id);
-        order.setStatus(OrderStatus.COMPLETED);
-        int userMoney=order.getUser().getMoney();
-        userMoney=userMoney-order.getRepairPrice();
+        Invoice invoice=null;
         User user=new User();
-        user=order.getUser();
+        user=(User)session.getAttribute("user");
+        invoice=InvoiceDB.getInvoiceById(id);
+        invoice.setInvoiceStatus(InvoiceStatus.PAID);
+        int userMoney=user.getMoney();
+        userMoney=userMoney-invoice.getPrice();
         user.setMoney(userMoney);
         UserDB.updateUser(user);
-        OrderDB.updateOrderStatus(order);
+        InvoiceDB.updateInvoiceStatus(InvoiceStatus.PAID,invoice.getId());
         response.sendRedirect(request.getContextPath()+"/ViewInvoicesServlet");
     }
 
@@ -39,24 +43,27 @@ public class ViewInvoicesServlet extends HttpServlet {
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
+        List<Invoice> invoices=null;
+        List<Invoice> invoicesP=null;
         RequestDispatcher dispatcher=null;
         switch (user.getStatus()){
             case ADMIN:{
-                orders= OrderDB.getOrdersByNNRepair();
-                request.setAttribute("repair","REPAIR");
-                request.setAttribute("completed","COMPLETED");
-                request.setAttribute("orders",orders);
+                invoices=InvoiceDB.getAllInvoices();
+                request.setAttribute("invoices",invoices);
                 dispatcher = getServletContext().getRequestDispatcher("/admin/viewInvoices.jsp");
                 break;
             }
             case USER:{
-                orders=OrderDB.getOrdersByUserIdAndStatus(user.getId(),"repair");
-                request.setAttribute("orders",orders);
+                invoices= InvoiceDB.getInByUserIdAndStatus(user.getId(),InvoiceStatus.NOT_PAID);
+                invoicesP= InvoiceDB.getInByUserIdAndStatus(user.getId(),InvoiceStatus.PAID);
+                request.setAttribute("invoices",invoices);
+                request.setAttribute("invoicesP",invoicesP);
                 dispatcher=getServletContext().getRequestDispatcher("/user/viewInvoices.jsp");
                 break;
             }
         }
-
+        user= UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         dispatcher.forward(request, response);
     }
 }

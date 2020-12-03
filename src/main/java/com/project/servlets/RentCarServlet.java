@@ -2,6 +2,7 @@ package com.project.servlets;
 
 import com.project.DB.CarDB;
 import com.project.DB.OrderDB;
+import com.project.DB.UserDB;
 import com.project.Service.DateService;
 import com.project.entities.Car;
 import com.project.entities.Order;
@@ -60,6 +61,8 @@ public class RentCarServlet extends HttpServlet {
         Car car=(Car) session.getAttribute("car");
         User user = (User) session.getAttribute("user");
         int dur=(int)session.getAttribute("dur");
+        user= UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         request.setAttribute("orderId",session.getAttribute("orderId"));
         request.setAttribute("total",dur * car.getPrice());
         request.setAttribute("dur",dur);

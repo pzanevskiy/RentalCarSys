@@ -1,12 +1,17 @@
 package com.project.servlets;
 
+import com.project.DB.InvoiceDB;
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
 import com.project.Service.DateService;
+import com.project.entities.Invoice;
 import com.project.entities.Order;
 import com.project.entities.User;
+import com.project.enums.InvoiceStatus;
 import com.project.enums.OrderStatus;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 
 import javax.servlet.RequestDispatcher;
@@ -40,12 +45,13 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
                         break;
                     }
                     case "invoice":{
-                        int repairPrice=Integer.parseInt(request.getParameter("repair"));
-                        String msg=request.getParameter("msg");
-                        order.setStatus(OrderStatus.REPAIR);
-                        order.setRepairPrice(repairPrice);
-                        order.setMessage(msg);
-                        OrderDB.updateOrderStatusRep(order);
+                        int difference=DateService.getDaysDifference(order.getEndDate());
+                        if(difference>0){
+                            Invoice invoice=new Invoice(order,order.getUser().getId(),difference*order.getCar().getPrice(),"Lease debt", InvoiceStatus.NOT_PAID);
+                            InvoiceDB.addInvoice(invoice);
+                        }
+                        order.setStatus(OrderStatus.COMPLETED);
+                        OrderDB.updateOrderStatus(order);
                         response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
                         break;
                     }
@@ -72,6 +78,8 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
         RequestDispatcher dispatcher=null;
+        user= UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         switch (user.getStatus()){
             case ADMIN:{
                 orders= OrderDB.getOrdersByStatus("in_process");

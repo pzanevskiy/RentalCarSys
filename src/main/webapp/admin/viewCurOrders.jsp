@@ -15,6 +15,11 @@
 <body>
 <jsp:include page="admin.jsp" />
 <div class="container my-3 mx-auto">
+    <div class="row m-2">
+        <div class="col-12 text-center">
+            <h1>Current orders</h1>
+        </div>
+    </div>
     <div class="accordion" id="accordionExample">
         <c:forEach var="order" items="${orders}">
             <div class="card bg-light border border-success my-1 rounded">
@@ -23,7 +28,7 @@
                         <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" style="text-decoration: none;"
                                 data-target="#collapse${order.id}" aria-expanded="false" aria-controls="collapse${order.id}">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-2">
-                                <div class="col">Invoice#<span id="order${order.id}">${order.id}</span></div>
+                                <div class="col">Order#<span id="order${order.id}">${order.id}</span></div>
                                 <div class="col">Car - ${order.car.name}</div>
                                 <div class="col">Rent's start - ${order.startDate}</div>
                                 <div class="col">Rent's end - ${order.endDate}</div>
@@ -135,10 +140,15 @@
                                     </form>
                                 </div>
                                 <div class="col text-center">
-                                    <button id="${order.id}" class="btn btn-danger"
-                                            type="button"  data-toggle="modal" data-target="#exampleModal" onclick="upd(${order.id})">
-                                        Invoice order
-                                    </button>
+                                    <form action="" method="post">
+                                        <input type="hidden"  name="id" value="${order.id}">
+                                        <input type="hidden" name="status" value="invoice">
+                                        <input type="submit" value="Send invoice" class="btn btn-primary">
+                                    </form>
+<%--                                    <button id="${order.id}" class="btn btn-danger"--%>
+<%--                                            type="button"  data-toggle="modal" data-target="#exampleModal" onclick="upd(${order.id})">--%>
+<%--                                        Invoice order--%>
+<%--                                    </button>--%>
                                 </div>
                             </div>
                         </div>

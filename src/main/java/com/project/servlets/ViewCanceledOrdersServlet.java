@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import com.project.DB.OrderDB;
+import com.project.DB.UserDB;
 import com.project.entities.Order;
 import com.project.entities.User;
 
@@ -27,6 +28,8 @@ public class ViewCanceledOrdersServlet extends HttpServlet {
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
         RequestDispatcher dispatcher=null;
+        user= UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         switch (user.getStatus()){
             case ADMIN:{
                 orders= OrderDB.getOrdersByStatus("rejected");

@@ -1,7 +1,11 @@
 package com.project.servlets;
 
+import com.project.DB.InvoiceDB;
 import com.project.DB.OrderDB;
+import com.project.Service.DateService;
+import com.project.entities.Invoice;
 import com.project.entities.Order;
+import com.project.enums.InvoiceStatus;
 import com.project.enums.OrderStatus;
 
 import javax.servlet.RequestDispatcher;
@@ -25,10 +29,16 @@ public class ViewReturnedOrdersServlet extends HttpServlet {
             case "invoice":{
                 int repairPrice=Integer.parseInt(request.getParameter("repair"));
                 String msg=request.getParameter("msg");
-                order.setStatus(OrderStatus.REPAIR);
-                order.setRepairPrice(repairPrice);
-                order.setMessage(msg);
-                OrderDB.updateOrderStatusRep(order);
+                int difference= DateService.getDaysDifference(order.getEndDate());
+                if(difference>0){
+                    Invoice invoice=new Invoice(order,order.getUser().getId(),difference*order.getCar().getPrice()+repairPrice,"Lease debt. "+msg, InvoiceStatus.NOT_PAID);
+                    InvoiceDB.addInvoice(invoice);
+                }else{
+                    Invoice invoice=new Invoice(order,order.getUser().getId(),repairPrice,msg, InvoiceStatus.NOT_PAID);
+                    InvoiceDB.addInvoice(invoice);
+                }
+                order.setStatus(OrderStatus.COMPLETED);
+                OrderDB.updateOrderStatus(order);
                 break;
             }
             case "complete":{

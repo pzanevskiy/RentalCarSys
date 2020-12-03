@@ -74,6 +74,8 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
         RequestDispatcher dispatcher=null;
+        user= UserDB.getUserById(user.getId());
+        session.setAttribute("user",user);
         switch (user.getStatus()){
             case ADMIN:{
                 orders= OrderDB.getOrdersByStatus("awaiting");

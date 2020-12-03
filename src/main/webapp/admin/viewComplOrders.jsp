@@ -36,6 +36,11 @@
     }
 </script>
 <div class="container my-3 mx-auto">
+    <div class="row m-2">
+        <div class="col-12 text-center">
+            <h1>Completed orders</h1>
+        </div>
+    </div>
     <div class="accordion" id="accordionExample">
         <c:forEach var="order" items="${orders}">
             <div class="card bg-light border border-success my-1 rounded">
@@ -44,7 +49,7 @@
                         <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" style="text-decoration: none;"
                                 data-target="#collapse${order.id}" aria-expanded="false" aria-controls="collapse${order.id}">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-2">
-                                <div class="col">Invoice#${order.id}</div>
+                                <div class="col">Order#${order.id}</div>
                                 <div class="col">Car - ${order.car.name}</div>
                                 <div class="col">Rent's start - ${order.startDate}</div>
                                 <div class="col">Rent's end - ${order.endDate}</div>
