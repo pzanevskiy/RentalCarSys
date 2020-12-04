@@ -18,7 +18,6 @@ import java.sql.SQLException;
 public class EditCarServlet extends HttpServlet {
     private static final Logger LOG=Logger.getLogger(EditCarServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         int id=Integer.parseInt(request.getParameter("id"));
         Car car=null;
         car= CarDB.getCarById(id);
@@ -38,11 +37,6 @@ public class EditCarServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id=Integer.parseInt(request.getParameter("ide"));
-        Car car=null;
-        car= CarDB.getCarById(id);
-        request.setAttribute("car",car);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/editCar.jsp");
-        dispatcher.forward(request, response);
+
     }
 }
