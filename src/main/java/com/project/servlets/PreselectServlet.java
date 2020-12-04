@@ -33,7 +33,6 @@ public class PreselectServlet extends HttpServlet {
 
         session.setAttribute("value",value);
         session.setAttribute("range",range);
-        User user=(User)session.getAttribute("user");
         ArrayList<Car> cars=null;
         cars=CarDB.getCars();
         if(value!="" && range==0){
@@ -45,22 +44,25 @@ public class PreselectServlet extends HttpServlet {
         if(value!="" && range>10){
             cars=CarDB.getCarsByBrandWithRange(value,range);
         }
-
-
         request.setAttribute("cars",cars);
         RequestDispatcher dispatcher=null;
-        switch (user.getStatus()){
-            case USER:{
-                dispatcher = getServletContext()
-                        .getRequestDispatcher("/user/viewCars.jsp"); break;
+        User user=(User)session.getAttribute("user");
+        if (user != null) {
+            switch (user.getStatus()){
+                case USER:{
+                    dispatcher = getServletContext()
+                            .getRequestDispatcher("/user/viewCars.jsp"); break;
+                }
+                case ADMIN:{
+                    dispatcher = getServletContext()
+                            .getRequestDispatcher("/admin/viewCars.jsp"); break;
+                }
+                default:{
+                    break;
+                }
             }
-            case ADMIN:{
-                dispatcher = getServletContext()
-                        .getRequestDispatcher("/admin/viewCars.jsp"); break;
-            }
-            default:{
-                break;
-            }
+        }else{
+            dispatcher = getServletContext().getRequestDispatcher("/guest/viewCars.jsp");
         }
         if(cars==null || cars.size()==0){
             response.sendRedirect(request.getContextPath()+"/PreselectServlet");
@@ -74,11 +76,16 @@ public class PreselectServlet extends HttpServlet {
         session.removeAttribute("value");
         session.removeAttribute("range");
         User user=(User)session.getAttribute("user");
-        user= UserDB.getUserById(user.getId());
-        session.setAttribute("user",user);
         ArrayList<String> names= CarDB.getDistinctCarNames();
         request.setAttribute("names",names);
-        RequestDispatcher dispatcher=getServletContext().getRequestDispatcher("/user/preselectCars.jsp");
+        RequestDispatcher dispatcher=null;
+        if(user!=null){
+            user= UserDB.getUserById(user.getId());
+            session.setAttribute("user",user);
+            dispatcher=getServletContext().getRequestDispatcher("/user/preselectCars.jsp");
+        }else{
+            dispatcher=getServletContext().getRequestDispatcher("/guest/preselectCars.jsp");
+        }
         dispatcher.forward(request,response);
     }
 }

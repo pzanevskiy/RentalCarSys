@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Pavel
-  Date: 23.11.2020
-  Time: 16:36
+  Date: 04.12.2020
+  Time: 17:39
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -13,7 +13,7 @@
     <title>List of cars</title>
 </head>
 <body>
-<jsp:include page="user.jsp"/>
+<jsp:include page="guest.jsp"/>
 <div class="container">
     <form action="PreselectServlet" method="post">
         <div class="row justify-content-center">

@@ -17,7 +17,7 @@ import java.sql.SQLException;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session=request.getSession();
         String email=request.getParameter("email");
         String password=request.getParameter("password");
         User user=null;
@@ -32,7 +32,6 @@ public class LoginServlet extends HttpServlet {
 
         if(user!=null && password.equals(user.getPassword())){
             status= user.getStatus();
-            HttpSession session=request.getSession();
             session.setAttribute("user",user);
             switch (status){
                 case USER:{
@@ -54,36 +53,47 @@ public class LoginServlet extends HttpServlet {
                     break;
                 }
             }
+        }else{
+            session.setAttribute("guest","guestUser");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/guest/guest.jsp");
+            dispatcher.forward(request, response);
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
-        user=UserDB.getUserById(user.getId());
-        UserStatus status=null;
-        status=user.getStatus();
-        switch (status){
-            case USER:{
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/user.jsp");
-                session.setAttribute("user",user);
-                dispatcher.forward(request, response);
-                break;
+        if(user!=null){
+            user=UserDB.getUserById(user.getId());
+            UserStatus status=null;
+            status=user.getStatus();
+            switch (status){
+                case USER:{
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/user.jsp");
+                    session.setAttribute("user",user);
+                    dispatcher.forward(request, response);
+                    break;
+                }
+                case ADMIN:{
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/admin.jsp");
+                    dispatcher.forward(request, response);
+                    break;
+                }
+                case BANNED:{
+                    String path=request.getContextPath();
+                    response.sendRedirect(path);
+                    break;
+                }
+                default:{
+                    break;
+                }
             }
-            case ADMIN:{
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/admin.jsp");
-                dispatcher.forward(request, response);
-                break;
-            }
-            case BANNED:{
-                String path=request.getContextPath();
-                response.sendRedirect(path);
-                break;
-            }
-            default:{
-                break;
-            }
+        }else{
+            session.setAttribute("guest","guestUser");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/guest/guest.jsp");
+            dispatcher.forward(request, response);
         }
+
 
     }
 }
