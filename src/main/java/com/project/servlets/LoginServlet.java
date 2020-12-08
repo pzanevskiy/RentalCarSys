@@ -35,6 +35,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user",user);
             switch (status){
                 case USER:{
+
                     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/user.jsp");
                     dispatcher.forward(request, response);
                     break;

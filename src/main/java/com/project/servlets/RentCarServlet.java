@@ -30,9 +30,16 @@ public class RentCarServlet extends HttpServlet {
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         int carId=Integer.parseInt(request.getParameter("id"));
-        int dur=Integer.parseInt(request.getParameter("dur"));
+        int dur;
+        String start=request.getParameter("start");
+        String end=request.getParameter("end");
+        LocalDateTime startDateTime= new LocalDateTime(start);
+        LocalDateTime endDateTime = new LocalDateTime(end);
+
+        //DateTime startDate=DateService.
         Car car=null;
         car= CarDB.getCarById(carId);
+        dur=Days.daysBetween(startDateTime,endDateTime).getDays();
         session.setAttribute("car",car);
         session.setAttribute("dur",dur);
         if(dur*car.getPrice()<user.getMoney()){
@@ -46,6 +53,10 @@ public class RentCarServlet extends HttpServlet {
             order.setUser(user);
             order.setCar(car);
             order.setStatus(OrderStatus.AWAITING);
+            order.setStartDate(DateService.getParsedDate(startDateTime));
+            order.setEndDate(DateService.getParsedDate(endDateTime));
+            session.setAttribute("begin",order.getStartDate());
+            session.setAttribute("end",order.getEndDate());
             order.setDuration(dur); /*Integer.parseInt(request.getParameter("dur"))*/
             OrderDB.addOrder(order);
             LOG.info(user.getName()+" rent "+car.getName()+" "+car.getModel());
@@ -68,6 +79,8 @@ public class RentCarServlet extends HttpServlet {
         request.setAttribute("dur",dur);
         request.setAttribute("car",car);
         request.setAttribute("user",user);
+        request.setAttribute("begin",session.getAttribute("begin"));
+        request.setAttribute("end",session.getAttribute("end"));
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/user/rentCar.jsp");
         dispatcher.forward(request, response);
     }

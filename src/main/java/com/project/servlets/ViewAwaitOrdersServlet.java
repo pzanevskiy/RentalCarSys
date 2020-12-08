@@ -35,8 +35,8 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                     case "accept":{
                         order.setStatus(OrderStatus.IN_PROCESS);
                         LocalDateTime localDateTime=LocalDateTime.now(DateTimeZone.forID("Europe/Minsk"));
-                        order.setStartDate(DateService.getParsedDate(localDateTime));
-                        order.setEndDate(DateService.getParsedDate(DateService.getAfterDurationDateTime(localDateTime,order.getDuration())));
+                       // order.setStartDate(DateService.getParsedDate(localDateTime));
+                       // order.setEndDate(DateService.getParsedDate(DateService.getAfterDurationDateTime(localDateTime,order.getDuration())));
                         int dur=order.getDuration();
                         int carPrice=order.getCar().getPrice();
                         int userMoney=order.getUser().getMoney();
@@ -45,7 +45,7 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                         userP.setMoney(finalMoney);
                         UserDB.updateUser(userP);
                         OrderDB.updateOrderStatus(order);
-                        OrderDB.updateOrderDates(order);
+                        //OrderDB.updateOrderDates(order);
                         break;
                     }
                     case "reject":{
