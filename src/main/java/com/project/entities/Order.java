@@ -8,23 +8,19 @@ public class Order {
     private User user;
     private Car car;
     private OrderStatus status;
-    private int repairPrice;
     private int duration;
-    private String message;
     private String startDate;
     private String endDate;
 
     public Order() {
     }
 
-    public Order(int id, User user, Car car, OrderStatus status,int repairPrice,int duration,String message, String startDate, String endDate) {
+    public Order(int id, User user, Car car, OrderStatus status,int duration, String startDate, String endDate) {
         this.id = id;
         this.user = user;
         this.car = car;
         this.status = status;
-        this.repairPrice=repairPrice;
         this.duration=duration;
-        this.message=message;
         this.startDate=startDate;
         this.endDate=endDate;
     }
@@ -61,28 +57,12 @@ public class Order {
         this.status = status;
     }
 
-    public int getRepairPrice(){
-        return repairPrice;
-    }
-
-    public void setRepairPrice(int repairPrice){
-        this.repairPrice=repairPrice;
-    }
-
     public int getDuration(){
         return duration;
     }
 
     public void setDuration(int duration) {
         this.duration = duration;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getStartDate() {

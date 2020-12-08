@@ -110,8 +110,8 @@ public class OrderDB {
      */
     public static int addOrder(Order order){
 
-        String sql="INSERT INTO orders (Id, user_id, car_id, status, repair_price, duration, message, startD, endD) " +
-                "VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?)";
+        String sql="INSERT INTO orders (Id, user_id, car_id, status, duration, startD, endD) " +
+                "VALUES (?, ?, ?, ?, ?, ? ,?)";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try(Connection conn=DriverManager.getConnection(url,root,password)) {
@@ -120,11 +120,9 @@ public class OrderDB {
                     preparedStatement.setInt(2,order.getUser().getId());
                     preparedStatement.setInt(3,order.getCar().getId());
                     preparedStatement.setString(4,order.getStatus().toString().toLowerCase());
-                    preparedStatement.setInt(5,0);
-                    preparedStatement.setInt(6,order.getDuration());
-                    preparedStatement.setString(7,"");
-                    preparedStatement.setString(8,order.getStartDate());
-                    preparedStatement.setString(9,order.getEndDate());
+                    preparedStatement.setInt(5,order.getDuration());
+                    preparedStatement.setString(6,order.getStartDate());
+                    preparedStatement.setString(7,order.getEndDate());
                     return preparedStatement.executeUpdate();
                 }
             }
@@ -192,42 +190,6 @@ public class OrderDB {
         }
     }
 
-    public static void updateOrderStatusRep(Order order) {
-        String sql="UPDATE orders SET status=?, repair_price=?, message=? WHERE Id=?";
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try(Connection conn=DriverManager.getConnection(url,root,password)) {
-                try(PreparedStatement preparedStatement=conn.prepareStatement(sql)){
-                    preparedStatement.setString(1,order.getStatus().toString().toLowerCase());
-                    preparedStatement.setInt(2,order.getRepairPrice());
-                    preparedStatement.setString(3,order.getMessage());
-                    preparedStatement.setInt(4,order.getId());
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static ArrayList<Order> getOrdersByNNRepair(){
-        ArrayList<Order> orders=new ArrayList<Order>();
-        String sql="SELECT * FROM orders WHERE repair_price>0";
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try(Connection conn= DriverManager.getConnection(url,root,password)) {
-                Statement statement=conn.createStatement();
-                ResultSet resultSet=statement.executeQuery(sql);
-                while (resultSet.next()){
-                    Order order= getOrder(resultSet);
-                    orders.add(order);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return orders;
-    }
 
     public static Order getOrder(ResultSet resultSet) throws SQLException {
         Order order=new Order();
@@ -244,11 +206,9 @@ public class OrderDB {
             case "returned":{ order.setStatus(OrderStatus.RETURNED); break; }
             default: { break; }
         }
-        order.setRepairPrice(resultSet.getInt(5));
-        order.setDuration(resultSet.getInt(6));
-        order.setMessage(resultSet.getString(7));
-        order.setStartDate(resultSet.getString(8));
-        order.setEndDate(resultSet.getString(9));
+        order.setDuration(resultSet.getInt(5));
+        order.setStartDate(resultSet.getString(6));
+        order.setEndDate(resultSet.getString(7));
         return order;
     }
 }
