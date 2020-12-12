@@ -2,6 +2,7 @@ package com.project.servlets;
 
 import com.project.DB.CarDB;
 import com.project.DB.UserDB;
+import com.project.Service.UserService;
 import com.project.entities.Car;
 import com.project.entities.User;
 
@@ -22,14 +23,10 @@ public class ViewUsersServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        ArrayList<User> users=null;
-        users= UserDB.getUsers();
+        UserService userService=new UserService();
+        ArrayList<User> users= userService.getAllUsers();
         request.setAttribute("users",users);
-        RequestDispatcher dispatcher = getServletContext()
-                .getRequestDispatcher("/admin/viewUsers.jsp");
-
-        // Forward (перенаправить) запрос, чтобы отобразить данные на странице JSP.
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/viewUsers.jsp");
         dispatcher.forward(request, response);
     }
 }

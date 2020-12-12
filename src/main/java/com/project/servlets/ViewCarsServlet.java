@@ -12,6 +12,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import com.project.DB.*;
+import com.project.Service.CarService;
+import com.project.Service.UserService;
 import com.project.entities.Car;
 import com.project.entities.User;
 
@@ -22,18 +24,19 @@ public class ViewCarsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        UserService userService=new UserService();
+        CarService carService=new CarService();
         HttpSession session = request.getSession();
         ArrayList<Car> cars = null;
         RequestDispatcher dispatcher = null;
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            user = UserDB.getUserById(user.getId());
+            user = userService.getUser(user.getId());
             session.setAttribute("user", user);
+            String value = "";
+            int range = 0;
             switch (user.getStatus()) {
                 case USER: {
-                    String value = "";
-                    int range = 0;
                     try {
                         value = (String) session.getAttribute("value");
                         range = (Integer) session.getAttribute("range");
@@ -45,33 +48,29 @@ public class ViewCarsServlet extends HttpServlet {
                     session.setAttribute("value", value);
                     session.setAttribute("range", range);
                     if (value == "" && range == 0) {
-                        cars = CarDB.getCars();
+                        cars = carService.getCars();
                     }
-                    if (value != "" && range == 0) {
-                        cars = CarDB.getCarsByBrand(value);
-                    }
-                    if (value == "" && range > 10) {
-                        cars = CarDB.getCarsByRange(range);
-                    }
-                    if (value != "" && range > 10) {
-                        cars = CarDB.getCarsByBrandWithRange(value, range);
-                    }
+                    cars=carService.selectCars(value,range);
                     dispatcher = getServletContext()
                             .getRequestDispatcher("/user/viewCars.jsp");
                     break;
                 }
                 case ADMIN: {
-                    cars = CarDB.getCars();
+                    cars = carService.getCars();
                     dispatcher = getServletContext()
                             .getRequestDispatcher("/admin/viewCars.jsp");
                     break;
                 }
                 default: {
+
                     break;
                 }
             }
         } else {
             cars = (ArrayList<Car>) request.getAttribute("cars");
+            if(cars==null){
+                cars=carService.getCars();
+            }
             dispatcher = getServletContext()
                     .getRequestDispatcher("/guest/viewCars.jsp");
         }

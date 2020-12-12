@@ -4,6 +4,9 @@ import com.project.DB.InvoiceDB;
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
 import com.project.Service.DateService;
+import com.project.Service.InvoiceService;
+import com.project.Service.OrderService;
+import com.project.Service.UserService;
 import com.project.entities.Invoice;
 import com.project.entities.Order;
 import com.project.entities.User;
@@ -28,6 +31,9 @@ import java.util.ArrayList;
 @WebServlet("/ViewCurrentOrdersServlet")
 public class ViewCurrentOrdersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserService userService = new UserService();
+        OrderService orderService = new OrderService();
+        InvoiceService invoiceService = new InvoiceService();
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         int id=Integer.parseInt(request.getParameter("id"));
@@ -36,11 +42,11 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
             case ADMIN:{
                 String status=request.getParameter("status");
                 Order order=null;
-                order=OrderDB.getOrderById(id);
+                order=orderService.getOrderById(id);
                 switch (status){
                     case "complete":{
                         order.setStatus(OrderStatus.COMPLETED);
-                        OrderDB.updateOrderStatus(order);
+                        orderService.updateOrderStatus(order);
                         response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
                         break;
                     }
@@ -48,10 +54,10 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
                         int difference=DateService.getDaysDifference(order.getEndDate());
                         if(difference>0){
                             Invoice invoice=new Invoice(order,order.getUser().getId(),difference*order.getCar().getPrice(),"Lease debt", InvoiceStatus.NOT_PAID);
-                            InvoiceDB.addInvoice(invoice);
+                            invoiceService.addInvoice(invoice);
                         }
                         order.setStatus(OrderStatus.COMPLETED);
-                        OrderDB.updateOrderStatus(order);
+                        orderService.updateOrderStatus(order);
                         response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
                         break;
                     }
@@ -63,9 +69,9 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
             }
             case USER:{
                 Order order=null;
-                order=OrderDB.getOrderById(id);
+                order=orderService.getOrderById(id);
                 order.setStatus(OrderStatus.RETURNED);
-                OrderDB.updateOrderStatus(order);
+                orderService.updateOrderStatus(order);
                 response.sendRedirect(request.getContextPath()+"/ViewCurrentOrdersServlet");
                 break;
             }
@@ -74,21 +80,23 @@ public class ViewCurrentOrdersServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserService userService = new UserService();
+        OrderService orderService = new OrderService();
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
         RequestDispatcher dispatcher=null;
-        user= UserDB.getUserById(user.getId());
+        user= userService.getUser(user.getId());
         session.setAttribute("user",user);
         switch (user.getStatus()){
             case ADMIN:{
-                orders= OrderDB.getOrdersByStatus("in_process");
+                orders= orderService.getOrdersByStatus("in_process");
                 request.setAttribute("orders",orders);
                 dispatcher = getServletContext().getRequestDispatcher("/admin/viewCurOrders.jsp");
                 break;
             }
             case USER:{
-                orders=OrderDB.getOrdersByUserIdAndStatus(user.getId(),"in_process");
+                orders=orderService.getOrdersByUserAndStatus(user.getId(),"in_process");
                 request.setAttribute("orders",orders);
                 dispatcher=getServletContext().getRequestDispatcher("/user/viewCurOrders.jsp");
                 break;

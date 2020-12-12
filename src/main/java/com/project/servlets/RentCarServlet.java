@@ -3,7 +3,10 @@ package com.project.servlets;
 import com.project.DB.CarDB;
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
+import com.project.Service.CarService;
 import com.project.Service.DateService;
+import com.project.Service.OrderService;
+import com.project.Service.UserService;
 import com.project.entities.Car;
 import com.project.entities.Order;
 import com.project.entities.User;
@@ -25,8 +28,10 @@ import java.util.ArrayList;
 
 @WebServlet("/RentCarServlet")
 public class RentCarServlet extends HttpServlet {
-    private static final Logger LOG=Logger.getLogger(RentCarServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserService userService=new UserService();
+        CarService carService=new CarService();
+        OrderService orderService=new OrderService();
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         int carId=Integer.parseInt(request.getParameter("id"));
@@ -36,30 +41,21 @@ public class RentCarServlet extends HttpServlet {
         LocalDateTime startDateTime= new LocalDateTime(start);
         LocalDateTime endDateTime = new LocalDateTime(end);
 
-        //DateTime startDate=DateService.
-        Car car=null;
-        car= CarDB.getCarById(carId);
+        Car car= carService.getCar(carId);
         dur=Days.daysBetween(startDateTime,endDateTime).getDays();
         session.setAttribute("car",car);
         session.setAttribute("dur",dur);
-        if(dur*car.getPrice()<user.getMoney()){
+        if(userService.checkMoney(dur,car,user)){
             Order order=new Order();
             ArrayList<Order> orders=null;
-            orders= OrderDB.getOrders();
+            orders= orderService.getOrders();
             int id=orders.get(orders.size()-1).getId()+1;
             session.setAttribute("orderId",id);
-            int userId=user.getId();
-            order.setId(id);
-            order.setUser(user);
-            order.setCar(car);
-            order.setStatus(OrderStatus.AWAITING);
-            order.setStartDate(DateService.getParsedDate(startDateTime));
-            order.setEndDate(DateService.getParsedDate(endDateTime));
-            session.setAttribute("begin",order.getStartDate());
-            session.setAttribute("end",order.getEndDate());
-            order.setDuration(dur); /*Integer.parseInt(request.getParameter("dur"))*/
-            OrderDB.addOrder(order);
-            LOG.info(user.getName()+" rent "+car.getName()+" "+car.getModel());
+            String startDate=DateService.getParsedDate(startDateTime);
+            String endDate=DateService.getParsedDate(endDateTime);
+            orderService.addOrder(id,user,car,startDate,endDate,dur);
+            session.setAttribute("begin",startDate);
+            session.setAttribute("end",endDate);
         }
         response.sendRedirect(request.getContextPath()+"/RentCarServlet");
 
@@ -67,12 +63,12 @@ public class RentCarServlet extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserService userService=new UserService();
         HttpSession session=request.getSession();
-        //int id=Integer.parseInt(request.getParameter("id"));
         Car car=(Car) session.getAttribute("car");
         User user = (User) session.getAttribute("user");
         int dur=(int)session.getAttribute("dur");
-        user= UserDB.getUserById(user.getId());
+        user= userService.getUser(user.getId());
         session.setAttribute("user",user);
         request.setAttribute("orderId",session.getAttribute("orderId"));
         request.setAttribute("total",dur * car.getPrice());

@@ -3,6 +3,9 @@ package com.project.servlets;
 import com.project.DB.InvoiceDB;
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
+import com.project.Service.InvoiceService;
+import com.project.Service.OrderService;
+import com.project.Service.UserService;
 import com.project.entities.Invoice;
 import com.project.entities.Order;
 import com.project.entities.User;
@@ -24,46 +27,49 @@ import java.util.List;
 @WebServlet("/ViewInvoicesServlet")
 public class ViewInvoicesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession();
-        int id=Integer.parseInt(request.getParameter("id"));
-        Invoice invoice=null;
-        User user=new User();
-        user=(User)session.getAttribute("user");
-        invoice=InvoiceDB.getInvoiceById(id);
+        HttpSession session = request.getSession();
+        int id = Integer.parseInt(request.getParameter("id"));
+        Invoice invoice = null;
+        User user = new User();
+        user = (User) session.getAttribute("user");
+        invoice = InvoiceDB.getInvoiceById(id);
         invoice.setInvoiceStatus(InvoiceStatus.PAID);
-        int userMoney=user.getMoney();
-        userMoney=userMoney-invoice.getPrice();
+        int userMoney = user.getMoney();
+        userMoney = userMoney - invoice.getPrice();
         user.setMoney(userMoney);
         UserDB.updateUser(user);
-        InvoiceDB.updateInvoiceStatus(InvoiceStatus.PAID,invoice.getId());
-        response.sendRedirect(request.getContextPath()+"/ViewInvoicesServlet");
+        InvoiceDB.updateInvoiceStatus(InvoiceStatus.PAID, invoice.getId());
+        response.sendRedirect(request.getContextPath() + "/ViewInvoicesServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession();
-        User user=(User)session.getAttribute("user");
-        ArrayList<Order> orders=null;
-        List<Invoice> invoices=null;
-        List<Invoice> invoicesP=null;
-        RequestDispatcher dispatcher=null;
-        switch (user.getStatus()){
-            case ADMIN:{
-                invoices=InvoiceDB.getAllInvoices();
-                request.setAttribute("invoices",invoices);
+        UserService userService = new UserService();
+        OrderService orderService = new OrderService();
+        InvoiceService invoiceService = new InvoiceService();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        ArrayList<Order> orders = null;
+        List<Invoice> invoices = null;
+        List<Invoice> invoicesP = null;
+        RequestDispatcher dispatcher = null;
+        switch (user.getStatus()) {
+            case ADMIN: {
+                invoices = invoiceService.getInvoices();
+                request.setAttribute("invoices", invoices);
                 dispatcher = getServletContext().getRequestDispatcher("/admin/viewInvoices.jsp");
                 break;
             }
-            case USER:{
-                invoices= InvoiceDB.getInByUserIdAndStatus(user.getId(),InvoiceStatus.NOT_PAID);
-                invoicesP= InvoiceDB.getInByUserIdAndStatus(user.getId(),InvoiceStatus.PAID);
-                request.setAttribute("invoices",invoices);
-                request.setAttribute("invoicesP",invoicesP);
-                dispatcher=getServletContext().getRequestDispatcher("/user/viewInvoices.jsp");
+            case USER: {
+                invoices = invoiceService.getInvoiceByStatus(InvoiceStatus.NOT_PAID, user.getId());
+                invoicesP = invoiceService.getInvoiceByStatus(InvoiceStatus.PAID, user.getId());
+                request.setAttribute("invoices", invoices);
+                request.setAttribute("invoicesP", invoicesP);
+                dispatcher = getServletContext().getRequestDispatcher("/user/viewInvoices.jsp");
                 break;
             }
         }
-        user= UserDB.getUserById(user.getId());
-        session.setAttribute("user",user);
+        user = userService.getUser(user.getId());
+        session.setAttribute("user", user);
         dispatcher.forward(request, response);
     }
 }

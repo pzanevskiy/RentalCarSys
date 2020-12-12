@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import com.project.DB.UserDB;
+import com.project.Service.UserService;
 import com.project.entities.User;
 import com.project.enums.UserStatus;
 import org.apache.log4j.Logger;
@@ -21,17 +22,11 @@ public class AddUserServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = new User();
-        ArrayList<User> users = new ArrayList<User>();
-        users = UserDB.getUsers();
-        int id = users.get(users.size() - 1).getId() + 1;
-        user.setId(id);
-        user.setName(request.getParameter("name"));
-        user.setPassword(request.getParameter("pass"));
-        user.setEmail(request.getParameter("email"));
-        user.setMoney(Integer.parseInt(request.getParameter("money")));
-        user.setStatus(UserStatus.USER);
-        UserDB.addUser(user);
+        UserService userService=new UserService();
+
+        User user = userService.addUser(request.getParameter("name"),request.getParameter("pass"),
+                request.getParameter("email"),request.getParameter("money"));
+
         if (session.getAttribute("guest") == "guestUser") {
             session.setAttribute("user",user);
             response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");

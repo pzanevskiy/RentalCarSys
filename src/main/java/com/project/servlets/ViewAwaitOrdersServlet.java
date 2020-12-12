@@ -3,6 +3,8 @@ package com.project.servlets;
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
 import com.project.Service.DateService;
+import com.project.Service.OrderService;
+import com.project.Service.UserService;
 import com.project.entities.Order;
 import com.project.entities.User;
 import com.project.enums.OrderStatus;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 @WebServlet("/ViewAwaitOrdersServlet")
 public class ViewAwaitOrdersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserService userService=new UserService();
+        OrderService orderService=new OrderService();
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         int id=Integer.parseInt(request.getParameter("ids"));
@@ -30,27 +34,23 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
             case ADMIN:{
                 String status=request.getParameter("status");
                 Order order=null;
-                order=OrderDB.getOrderById(id);
+                order=orderService.getOrderById(id);
                 switch (status){
                     case "accept":{
                         order.setStatus(OrderStatus.IN_PROCESS);
-                        LocalDateTime localDateTime=LocalDateTime.now(DateTimeZone.forID("Europe/Minsk"));
-                       // order.setStartDate(DateService.getParsedDate(localDateTime));
-                       // order.setEndDate(DateService.getParsedDate(DateService.getAfterDurationDateTime(localDateTime,order.getDuration())));
                         int dur=order.getDuration();
                         int carPrice=order.getCar().getPrice();
                         int userMoney=order.getUser().getMoney();
                         int finalMoney=userMoney-(dur*carPrice);
-                        User userP= UserDB.getUserById(order.getUser().getId());
+                        User userP= userService.getUser(order.getUser().getId());
                         userP.setMoney(finalMoney);
-                        UserDB.updateUser(userP);
-                        OrderDB.updateOrderStatus(order);
-                        //OrderDB.updateOrderDates(order);
+                        userService.updateUser(userP);
+                        orderService.updateOrderStatus(order);
                         break;
                     }
                     case "reject":{
                         order.setStatus(OrderStatus.REJECTED);
-                        OrderDB.updateOrderStatus(order);
+                        orderService.updateOrderStatus(order);
                         break;
                     }
                     default:{
@@ -60,7 +60,7 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
                 break;
             }
             case USER:{
-                OrderDB.removeOrder(id);
+                orderService.deleteOrder(id);
                 break;
             }
         }
@@ -69,22 +69,23 @@ public class ViewAwaitOrdersServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        UserService userService=new UserService();
+        OrderService orderService=new OrderService();
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
         RequestDispatcher dispatcher=null;
-        user= UserDB.getUserById(user.getId());
+        user= userService.getUser(user.getId());
         session.setAttribute("user",user);
         switch (user.getStatus()){
             case ADMIN:{
-                orders= OrderDB.getOrdersByStatus("awaiting");
+                orders= orderService.getOrdersByStatus("awaiting");
                 request.setAttribute("orders",orders);
                 dispatcher = getServletContext().getRequestDispatcher("/admin/viewAwaitOrders.jsp");
                 break;
             }
             case USER:{
-                orders=OrderDB.getOrdersByUserIdAndStatus(user.getId(),"awaiting");
+                orders=orderService.getOrdersByUserAndStatus(user.getId(),"awaiting");
                 request.setAttribute("orders",orders);
                 dispatcher=getServletContext().getRequestDispatcher("/user/viewAwaitOrders.jsp");
                 break;

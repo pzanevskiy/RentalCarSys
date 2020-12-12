@@ -2,6 +2,8 @@ package com.project.servlets;
 
 import com.project.DB.OrderDB;
 import com.project.DB.UserDB;
+import com.project.Service.OrderService;
+import com.project.Service.UserService;
 import com.project.entities.Order;
 import com.project.entities.User;
 
@@ -23,22 +25,23 @@ public class ViewCanceledOrdersServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        UserService userService=new UserService();
+        OrderService orderService=new OrderService();
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
         ArrayList<Order> orders=null;
         RequestDispatcher dispatcher=null;
-        user= UserDB.getUserById(user.getId());
+        user= userService.getUser(user.getId());
         session.setAttribute("user",user);
         switch (user.getStatus()){
             case ADMIN:{
-                orders= OrderDB.getOrdersByStatus("rejected");
+                orders= orderService.getOrdersByStatus("rejected");
                 request.setAttribute("orders",orders);
                 dispatcher = getServletContext().getRequestDispatcher("/admin/viewCancelOrders.jsp");
                 break;
             }
             case USER:{
-                orders=OrderDB.getOrdersByUserIdAndStatus(user.getId(),"rejected");
+                orders=orderService.getOrdersByUserAndStatus(user.getId(),"rejected");
                 request.setAttribute("orders",orders);
                 dispatcher=getServletContext().getRequestDispatcher("/user/viewCancelOrders.jsp");
                 break;

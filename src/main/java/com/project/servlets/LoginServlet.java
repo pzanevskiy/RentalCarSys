@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import com.project.DB.UserDB;
+import com.project.Service.UserService;
 import com.project.entities.User;
 import com.project.enums.UserStatus;
 
@@ -18,11 +19,12 @@ import java.sql.SQLException;
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession();
+        UserService userService=new UserService();
         String email=request.getParameter("email");
         String password=request.getParameter("password");
         User user=null;
         UserStatus status=null;
-        user= UserDB.getUserByEmail(email);
+        user= userService.getUserByEmail(email);
 
         if(user!=null && !password.equals(user.getPassword())){
             user=null;
@@ -63,9 +65,10 @@ public class LoginServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        UserService userService=new UserService();
         User user = (User)session.getAttribute("user");
         if(user!=null){
-            user=UserDB.getUserById(user.getId());
+            user=userService.getUser(user.getId());
             UserStatus status=null;
             status=user.getStatus();
             switch (status){

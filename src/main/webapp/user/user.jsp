@@ -41,11 +41,11 @@
                     Menu
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewAwaitOrdersServlet">View awaiting orders</a>
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCurrentOrdersServlet">View current orders</a>
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCanceledOrdersServlet">View canceled orders</a>
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewComplOrdersServlet">View completed orders</a>
-                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewInvoicesServlet">View invoices for auto repair</a>
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewAwaitOrdersServlet">Awaiting orders</a>
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCurrentOrdersServlet">Current orders</a>
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewCanceledOrdersServlet">Canceled orders</a>
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewComplOrdersServlet">Completed orders</a>
+                    <a class="btn btn-outline-light rounded-pill dropdown-item" href="ViewInvoicesServlet">Invoices for auto repair</a>
                 </div>
             </li >
         </ul>

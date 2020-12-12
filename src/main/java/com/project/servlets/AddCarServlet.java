@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import com.project.DB.CarDB;
+import com.project.Service.CarService;
 import com.project.entities.Car;
 import com.project.enums.CarStatus;
 import org.apache.log4j.Logger;
@@ -18,17 +19,8 @@ import java.util.ArrayList;
 public class AddCarServlet extends HttpServlet {
     private static final Logger LOG=Logger.getLogger(AddCarServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        Car car=new Car();
-        ArrayList<Car> cars=null;
-        cars = CarDB.getCars();
-        int id=cars.get(cars.size()-1).getId()+1;
-        car.setId(id);
-        car.setName(request.getParameter("brand"));
-        car.setModel(request.getParameter("model"));
-        car.setPrice(Integer.parseInt(request.getParameter("price")));
-        car.setStatus(CarStatus.FREE);
-        CarDB.addCar(car);
+        CarService carService=new CarService();
+        Car car= carService.addCar(request.getParameter("brand"),request.getParameter("model"),request.getParameter("price"));
         LOG.info("admin add new car "+car.getName()+" "+car.getModel()+" "+car.getPrice());
         response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");
     }

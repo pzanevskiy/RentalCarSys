@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import com.project.DB.CarDB;
+import com.project.Service.CarService;
 import com.project.entities.Car;
 import org.apache.log4j.Logger;
 
@@ -15,13 +16,11 @@ import java.sql.SQLException;
 
 @WebServlet("/RemoveCarServlet")
 public class RemoveCarServlet extends HttpServlet {
-    private static final Logger LOG=Logger.getLogger(RemoveCarServlet.class);
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CarService carService=new CarService();
         int id=Integer.parseInt(request.getParameter("id"));
-        Car car=CarDB.getCarById(id);
-        CarDB.removeCar(id);
-        LOG.info("car "+car.getId()+" removed");
+        carService.deleteCar(id);
         response.sendRedirect(request.getContextPath()+"/ViewCarsServlet");
 
     }
